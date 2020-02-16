@@ -1,4 +1,5 @@
 import os.path
+import re
 
 file_import_path = "./notas.txt"
 
@@ -26,6 +27,35 @@ Divirta-se!
 
 """
 
+
+def get_note_raw_content():
+    raw = ''
+    with open(file_import_path) as file:
+        raw = file.read()
+    return raw
+
+
+def get_note_content_iterator():
+    pattern = r"^^## Horários\n(\d{2}\/\d{2}\/\d{4}\s(\d{2}h\d{2}\s-\s\d{2}h\d{2}\t?)+(.*)\n)+(\n{2})?"
+
+    raw_content = get_note_raw_content()
+
+    return re.search(pattern, raw_content, re.MULTILINE | re.IGNORECASE)
+
+
+def get_raw_lines_notes(matches):
+    hours_list = []
+    for line in matches.group().split('\n')[1:]:
+        if not line:
+            continue
+        hours_list.append(line)
+    return hours_list
+
+
+"""
+Então, começa aqui o 'main'
+"""
+
 exists = os.path.exists(file_import_path)
 
 if not exists:
@@ -33,4 +63,13 @@ if not exists:
         file.write(file_sample)
     print(f"Arquivo de exemplo criado: {file_import_path}")
     exit()
+
+matches = get_note_content_iterator()
+
+notes = get_raw_lines_notes(matches)
+
+print(notes)
+
+
+
 
