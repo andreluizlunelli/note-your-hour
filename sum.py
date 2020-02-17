@@ -2,6 +2,7 @@ import os.path
 import re
 from datetime import timedelta
 import sys
+from sys import exit
 
 file_import_path = "./notas.txt"
 
