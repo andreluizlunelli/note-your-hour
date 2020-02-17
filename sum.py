@@ -1,5 +1,7 @@
 import os.path
 import re
+from datetime import datetime
+from datetime import timedelta
 
 file_import_path = "./notas.txt"
 
@@ -52,6 +54,38 @@ def get_raw_lines_notes(matches):
     return hours_list
 
 
+def sum_hour_notes(notes):
+    """Somar horas encontradas"""
+
+    sum = timedelta()
+
+    for note in notes:
+        pattern = r"(\d{2}h\d{2}\s-\s\d{2}h\d{2}\t?)+"
+
+        search = re.search(pattern, note)
+
+        raw_hours = search.group()
+
+        pair_start_end_hour = raw_hours.split('\t')
+
+        for pair in pair_start_end_hour:
+            if not pair:
+                continue
+
+            start, end = pair.split(' - ')
+
+            h, m = start.split('h')
+
+            start_hour = timedelta(hours=int(h), minutes=int(m))
+
+            h, m = end.split('h')
+
+            end_hour = timedelta(hours=int(h), minutes=int(m))
+
+            sum += end_hour - start_hour
+
+    return sum
+
 """
 Então, começa aqui o 'main'
 """
@@ -68,8 +102,6 @@ matches = get_note_content_iterator()
 
 notes = get_raw_lines_notes(matches)
 
-print(notes)
+sum_hour = sum_hour_notes(notes)
 
-
-
-
+print(f"Você trabalho um total de {sum_hour}")
