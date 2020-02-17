@@ -104,4 +104,9 @@ notes = get_raw_lines_notes(matches)
 
 sum_hour = sum_hour_notes(notes)
 
-print(f"Você trabalho um total de {sum_hour}")
+totsec = sum_hour.total_seconds()
+h = totsec//3600
+m = (totsec%3600) // 60
+sec =(totsec%3600)%60
+
+print(f"Você trabalhou um total de {int(h)} horas e {int(m)} minutos")
