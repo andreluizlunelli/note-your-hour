@@ -1,7 +1,7 @@
 import os.path
 import re
-from datetime import datetime
 from datetime import timedelta
+import sys
 
 file_import_path = "./notas.txt"
 
@@ -86,17 +86,32 @@ def sum_hour_notes(notes):
 
     return sum
 
+
+def get_custom_file_if_exists(file_import_path):
+    try:
+        file_import_path = sys.argv[1]
+    except IndexError as e:
+        pass
+    return file_import_path
+
+
+def check_if_file_exists(file_import_path):
+    exists = os.path.exists(file_import_path)
+
+    if not exists:
+        with open(file_import_path, 'w') as file:
+            file.write(file_sample)
+        print(f"Arquivo de exemplo criado: {file_import_path}")
+        exit()
+
+
 """
-Então, começa aqui o 'main'
+Começa aqui o 'main'
 """
 
-exists = os.path.exists(file_import_path)
+file_import_path = get_custom_file_if_exists(file_import_path)
 
-if not exists:
-    with open(file_import_path, 'w') as file:
-        file.write(file_sample)
-    print(f"Arquivo de exemplo criado: {file_import_path}")
-    exit()
+check_if_file_exists(file_import_path)
 
 matches = get_note_content_iterator()
 
@@ -107,6 +122,6 @@ sum_hour = sum_hour_notes(notes)
 totsec = sum_hour.total_seconds()
 h = totsec//3600
 m = (totsec%3600) // 60
-sec =(totsec%3600)%60
+sec = (totsec%3600)%60
 
 print(f"Você trabalhou um total de {int(h)} horas e {int(m)} minutos")
