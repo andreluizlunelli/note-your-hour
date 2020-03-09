@@ -106,23 +106,36 @@ def check_if_file_exists(file_import_path):
         exit()
 
 
-"""
-Começa aqui o 'main'
-"""
+def get_hour_and_minute(hours_timedelta):
+    hour = hours_timedelta // 3600
 
-file_import_path = get_custom_file_if_exists(file_import_path)
+    minute = (hours_timedelta % 3600) // 60
 
-check_if_file_exists(file_import_path)
+    return hour, minute
 
-matches = get_note_content_iterator()
 
-notes = get_raw_lines_notes(matches)
+if __name__ == '__main__':
+    file_import_path = get_custom_file_if_exists(file_import_path)
 
-sum_hour = sum_hour_notes(notes)
+    check_if_file_exists(file_import_path)
 
-totsec = sum_hour.total_seconds()
-h = totsec//3600
-m = (totsec%3600) // 60
-sec = (totsec%3600)%60
+    matches = get_note_content_iterator()
 
-print(f"Você trabalhou um total de {int(h)} horas e {int(m)} minutos")
+    notes = get_raw_lines_notes(matches)
+
+    use_notes = notes
+
+    if len(sys.argv) > 2:
+        date_index = int(sys.argv[2])
+
+        date_position_index = ((len(notes) - date_index) * -1) + 1
+
+        use_notes = [notes[date_position_index]]
+
+    sum_hour = sum_hour_notes(use_notes)
+
+    totsec = sum_hour.total_seconds()
+
+    hour, minute = get_hour_and_minute(totsec)
+
+    print(f"Você trabalhou um total de {int(hour)} horas e {int(minute)} minutos")
