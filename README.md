@@ -2,7 +2,7 @@
 
 Repositório para quantificar horas trabalhadas baseado em um arquivo txt
 
-Para rodar basta chamar(a primeira vez será criado um arquivo de exemplo):
+Para rodar basta chamar(_a primeira vez será criado um arquivo de exemplo_):
 ```
 python sum.py
 ```
